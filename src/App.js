@@ -16,15 +16,18 @@ const deviceHeight = Dimensions.get("window").height;
 const launchscreenBg = require("../assets/launchscreen-bg.png");
 
 const AppNavigator = StackNavigator(
+
   {
-    ListUsers: { screen: ListUsers },
     Login: { screen: Login },
     Register: { screen: Register },
+    ListUsers: { screen: ListUsers },
   },
+
   {
-    initialRouteName: "ListUsers",
+    initialRouteName: "Login",
     headerMode: "none"
   }
+  
 );
 
 
@@ -34,11 +37,6 @@ const styles = StyleSheet.create({
     width: null,
     height: null
   },
-  text: {
-    color: "#FFFFFF",
-    marginTop: deviceHeight / 4,
-    textAlign: 'center'
-  }
 });
 
 export default class App extends Component {
@@ -64,10 +62,10 @@ export default class App extends Component {
       <Container>
         <StatusBar barStyle="light-content" />
           <ImageBackground source={launchscreenBg} style={styles.imageContainer}>
-            <Text style={styles.text}>Logue para listar usuários registrados</Text>
-            <AppNavigator />
+              <AppNavigator />
           </ImageBackground>
-    </Container>);
+      </Container>
+      );
 	}
 }
 

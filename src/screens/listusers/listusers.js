@@ -1,6 +1,14 @@
 import React, { Component } from "react";
-import { View, ScrollView } from "react-native";
-import { Text, Content, Form, Item, Button, Input } from "native-base";
+import {
+  Container,
+  Header,
+  Title,
+  Content,
+  Card,
+  CardItem,
+  Text,
+  Body,
+} from "native-base";
 import { StackNavigator } from "react-navigation";
 
 
@@ -16,24 +24,38 @@ export default class ListUsers extends Component<Props> {
     this.setState({userlist: theFetchJson.original});
   }
 
+
   render() {
     if (this.state.userlist == null)
       return null;
 
-    var userrows = [];
+    var cards = [];
+    var k = 0;
     for (let user of this.state.userlist) {
-      userrows.push(<Text>{user["name"]}</Text>);
-      userrows.push(<Text>{user["email"]}</Text>);
+      cards.push(
+        <Card key={k++}>
+          <CardItem key={k++}>
+            <Body key={k++}>
+              <Text key={k++}>Login: {user["name"]}</Text>
+              <Text key={k++}>Email: {user["email"]}</Text>
+            </Body>
+          </CardItem>
+        </Card>
+        );
     }
 
     return (
+      <Container>
+        <Header>
+          <Body>
+            <Title>Usuários</Title>
+          </Body>
+        </Header>
 
-      <ScrollView>
-        <View>
-          {userrows}
-        </View>
-      </ScrollView>
-
+        <Content padder>
+          {cards}
+        </Content>
+      </Container>
       );
   }
 

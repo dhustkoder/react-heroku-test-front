@@ -4,19 +4,6 @@ import { Text, Content, Form, Item, Button, Input } from "native-base";
 import { StackNavigator } from "react-navigation";
 import styles from "./styles";
 
-/*
-    await fetch('https://shielded-retreat-49907.herokuapp.com/api/users', {
-    method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        firstParam: 'yourValue',
-        secondParam: 'yourOtherValue',
-      }),
-    });
-*/
 
 export default class Register extends Component<Props> {
 
@@ -25,7 +12,8 @@ export default class Register extends Component<Props> {
     login: "",
     email: "",
     pass: "",
-    tryToRegister: false
+    tryToRegister: false,
+    fetchResponseJson: null
   };
 
 
@@ -38,6 +26,29 @@ export default class Register extends Component<Props> {
         console.log("login: " + this.state.login);
         console.log("email: " + this.state.email);
         console.log("login: " + this.state.pass);
+
+        fetch('https://shielded-retreat-49907.herokuapp.com/api/users', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            login: this.state.login,
+            email: this.state.email,
+            password:  this.state.pass
+            }),
+        })
+
+        .then((response) => response.json())
+        .then((responseJson) => this.setState({fetchResponseJson: responseJson}))
+        .catch((error) => {
+          console.error(error);
+        });
+
+        console.log(this.state.fetchResponseJson);
+        this.setState({tryToRegister: false});
+
       } else {
         Alert.alert("Preencha todos os campos!");
         this.setState({tryToRegister: false});
