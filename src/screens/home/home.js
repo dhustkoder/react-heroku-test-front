@@ -7,7 +7,7 @@ export default class Home extends Component<Props> {
     title: 'Home'
   }
 
-  render() 
+  render()
   {
     const { navigate } = this.props.navigation;
 

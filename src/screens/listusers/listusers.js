@@ -22,7 +22,8 @@ export default class ListUsers extends Component<Props> {
     userlist: null
   };
 
-  async componentDidMount() {
+  async componentDidMount() 
+  {
     try {
       const theFetch = await fetch("https://shielded-retreat-49907.herokuapp.com/api/users");
       const theFetchJson = await theFetch.json();
@@ -33,7 +34,8 @@ export default class ListUsers extends Component<Props> {
   }
 
 
-  render() {
+  render() 
+  {
 
     var cards = [];
     if (this.state.userlist != null) {
@@ -67,5 +69,6 @@ export default class ListUsers extends Component<Props> {
       );
 
   }
+  
 
 }

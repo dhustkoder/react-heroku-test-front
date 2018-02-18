@@ -24,6 +24,7 @@ const AppNavigator = StackNavigator(
 
   {
     initialRouteName: "Register"
+    
   }
 );
 
@@ -42,9 +43,9 @@ export default class App extends Component {
     return (
       <Container>
         <StatusBar barStyle="light-content" />
-          <ImageBackground source={launchscreenBg} style={styles.imageContainer}>
-            <AppNavigator />
-          </ImageBackground>
+            <ImageBackground source={launchscreenBg} style={styles.imageContainer}>
+              <AppNavigator />
+            </ImageBackground>
       </Container>
       );
 	}

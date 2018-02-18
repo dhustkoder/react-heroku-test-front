@@ -70,12 +70,13 @@ export default class Register extends Component<Props> {
     const { navigate } = this.props.navigation;
 
     if (this.state.registerPressed) {
-      this.doRegistration();
       this.setState({registerPressed: false});
+      this.doRegistration();
     } else if (this.state.registrationFailed) {
-      Alert.alert(this.state.registrationFailReason);
       this.setState({registrationFailed: false});
+      Alert.alert(this.state.registrationFailReason);
     } else if (this.state.registrationSucceed) {
+      this.setState({registrationSucceed: false});
       Alert.alert("Registro realizado com sucesso!");
       navigate("Login");
     }
