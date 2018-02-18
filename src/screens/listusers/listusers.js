@@ -14,6 +14,9 @@ import { StackNavigator } from "react-navigation";
 
 
 export default class ListUsers extends Component<Props> {
+  static navigationOptions = {
+    title: 'Usuários'
+  }
 
   state = {
     userlist: null
@@ -57,12 +60,6 @@ export default class ListUsers extends Component<Props> {
 
     return (
       <Container>
-        <Header>
-          <Body>
-            <Title>Usuários</Title>
-          </Body>
-        </Header>
-
         <Content padder>
           {cards}
         </Content>

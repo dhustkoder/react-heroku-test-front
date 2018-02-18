@@ -7,31 +7,24 @@ import { StackNavigator, DrawerNavigator } from "react-navigation";
 // routes
 import Login from "./screens/login/login";
 import Register from "./screens/register/register";
+import Home from "./screens/home/home"
 import ListUsers from "./screens/listusers/listusers";
 // end routes
 
-
-const deviceHeight = Dimensions.get("window").height;
 const launchscreenBg = require("../assets/launchscreen-bg.png");
 
 
 const AppNavigator = StackNavigator(
-
   {
-    Register: { screen: Register },
-    ListUsers: { screen: ListUsers },
     Login: { screen: Login },
+    Register: { screen: Register },
+    Home: { screen: Home },
+    ListUsers: { screen: ListUsers },
   },
 
   {
-    initialRouteName: "Register",
-    transitionConfig: () => ({ 
-      containerStyle: {
-      backgroundColor: 'transparent'
-      } 
-    })
+    initialRouteName: "Register"
   }
-  
 );
 
 const styles = StyleSheet.create({

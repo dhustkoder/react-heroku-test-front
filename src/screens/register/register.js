@@ -1,11 +1,15 @@
 import React, { Component } from "react";
-import { ActivityIndicator, Alert, View } from "react-native";
+import { Alert } from "react-native";
 import { Text, Content, Form, Item, Button, Input,  Container } from "native-base";
 import { StackNavigator } from "react-navigation";
-import styles from "./styles";
+
 
 
 export default class Register extends Component<Props> {
+
+  static navigationOptions = {
+      title: 'Registrar'
+  }
 
   state = {
     login: "",
@@ -13,15 +17,18 @@ export default class Register extends Component<Props> {
     pass: "",
     registerPressed: false,
     tryingToRegister: false,
+    registrationFailed: false,
+    registrationSucceed: false,
+    registrationFailReason: null
   };
 
   doRegistration()
   {
-    if (this.state.tryingToRegister)
+    if (this.state.tryingToRegister) {
       Alert.alert("Cadastrando...");
-
-    if (this.state.login != "" && this.state.email != "" && this.state.pass != "") {
-      fetch('https://shielded-retreat-49907.herokuapp.com/api/users', {
+    } else if (this.state.login != "" && this.state.email != "" && this.state.pass != "") {
+      this.setState({tryingToRegister: true});
+      fetch('https://shielded-retreat-49907.herokuapp.com/api/users/register', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -37,8 +44,22 @@ export default class Register extends Component<Props> {
       .then((responseJson) => {
         console.log("communication done!");
         console.log(responseJson);
+        this.setState({
+          tryingToRegister: false,
+          registrationFailed: responseJson.original["error"] ? true : false,
+          registrationFailReason: responseJson.original["error"],
+          registrationSucceed: responseJson.original["success"] ? true : false,
+        });
+        console.log(this.state);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        this.setState({
+          tryingToRegister: false,
+          registrationFailed: true,
+          registrationFailReason: error
+        });
+      });
     } else {
       Alert.alert("Preencha todos os campos!");
     }
@@ -46,55 +67,51 @@ export default class Register extends Component<Props> {
 
   componentDidUpdate() 
   {
-    if (this.state.registerPressed)  {
+    const { navigate } = this.props.navigation;
+
+    if (this.state.registerPressed) {
       this.doRegistration();
       this.setState({registerPressed: false});
+    } else if (this.state.registrationFailed) {
+      Alert.alert(this.state.registrationFailReason);
+      this.setState({registrationFailed: false});
+    } else if (this.state.registrationSucceed) {
+      Alert.alert("Registro realizado com sucesso!");
+      navigate("Login");
     }
+
   }
 
   render() 
   {
     const { navigate } = this.props.navigation;
 
-    var registerButton = [];
-
-    if (this.tryingToRegister) {
-      registerButton.push(
-        <View key={0} style={{flex: 1, paddingTop: 20}}>
-          <ActivityIndicator key={1} />
-        </View>
-      );
-    } else {
-      registerButton.push(
-        <Button block last key={0} onPress={() => this.setState({registerPressed: true})} style={{ margin: 15, marginTop: 15 }}>
-          <Text key={1}>Registrar</Text>
-        </Button>
-      );
-    }
-
     return (
-          <Container>
-            <Content>
-              <Form>
-                <Item>
-                  <Input onChangeText={(login) => this.setState({login})} placeholder="Usuário" />
-                </Item>
-                <Item>
-                  <Input onChangeText={(email) => this.setState({email})} placeholder="Email" />
-                </Item>
-                <Item last>
-                  <Input onChangeText={(pass) => this.setState({pass})} placeholder="Senha" secureTextEntry />
-                </Item>
-              </Form>
+      <Container>
 
-              {registerButton}
+        <Content>
+          <Form>
+            <Item>
+              <Input onChangeText={(login) => this.setState({login})} placeholder="Usuário" />
+            </Item>
+            <Item>
+              <Input onChangeText={(email) => this.setState({email})} placeholder="Email" />
+            </Item>
+            <Item last>
+              <Input onChangeText={(pass) => this.setState({pass})} placeholder="Senha" secureTextEntry />
+            </Item>
+          </Form>
 
-              <Button block onPress={() => navigate("Login")} style={{ margin: 15, marginTop: 15 }}>
-                <Text>Logar</Text>
-              </Button>
+          <Button block last onPress={() => this.setState({registerPressed: true})} style={{ margin: 15, marginTop: 15 }}>
+            <Text>Registrar</Text>
+          </Button>
 
-            </Content>
-          </Container>
+          <Button block onPress={() => navigate("Login")} style={{ margin: 15, marginTop: 15 }}>
+            <Text>Logar</Text>
+          </Button>
+        </Content>
+        
+      </Container>
     );
   }
 
