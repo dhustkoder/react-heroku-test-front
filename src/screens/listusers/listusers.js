@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { ActivityIndicator, View } from "react-native";
 import {
   Container,
   Header,
@@ -19,28 +20,38 @@ export default class ListUsers extends Component<Props> {
   };
 
   async componentDidMount() {
-    const theFetch = await fetch("https://shielded-retreat-49907.herokuapp.com/api/users");
-    const theFetchJson = await theFetch.json();
-    this.setState({userlist: theFetchJson.original});
+    try {
+      const theFetch = await fetch("https://shielded-retreat-49907.herokuapp.com/api/users");
+      const theFetchJson = await theFetch.json();
+      this.setState({userlist: theFetchJson.original});
+    } catch (error) {
+      console.error(error);
+    }
   }
 
 
   render() {
-    if (this.state.userlist == null)
-      return null;
 
     var cards = [];
-    var k = 0;
-    for (let user of this.state.userlist) {
+    if (this.state.userlist != null) {
+      var k = 0;
+      for (let user of this.state.userlist) {
+        cards.push(
+          <Card key={k++}>
+            <CardItem key={k++}>
+              <Body key={k++}>
+                <Text key={k++}>Login: {user["name"]}</Text>
+                <Text key={k++}>Email: {user["email"]}</Text>
+              </Body>
+            </CardItem>
+          </Card>
+          );
+      }
+    } else {
       cards.push(
-        <Card key={k++}>
-          <CardItem key={k++}>
-            <Body key={k++}>
-              <Text key={k++}>Login: {user["name"]}</Text>
-              <Text key={k++}>Email: {user["email"]}</Text>
-            </Body>
-          </CardItem>
-        </Card>
+        <View key={0} style={{flex: 1, paddingTop: 20}}>
+          <ActivityIndicator key={1} />
+        </View>
         );
     }
 
@@ -57,6 +68,7 @@ export default class ListUsers extends Component<Props> {
         </Content>
       </Container>
       );
+
   }
 
 }

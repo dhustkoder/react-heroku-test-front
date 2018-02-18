@@ -12,24 +12,27 @@ import ListUsers from "./screens/listusers/listusers";
 
 
 const deviceHeight = Dimensions.get("window").height;
-
 const launchscreenBg = require("../assets/launchscreen-bg.png");
+
 
 const AppNavigator = StackNavigator(
 
   {
-    Login: { screen: Login },
     Register: { screen: Register },
     ListUsers: { screen: ListUsers },
+    Login: { screen: Login },
   },
 
   {
-    initialRouteName: "Login",
-    headerMode: "none"
+    initialRouteName: "Register",
+    transitionConfig: () => ({ 
+      containerStyle: {
+      backgroundColor: 'transparent'
+      } 
+    })
   }
   
 );
-
 
 const styles = StyleSheet.create({
   imageContainer: {
@@ -39,30 +42,15 @@ const styles = StyleSheet.create({
   },
 });
 
+
 export default class App extends Component {
-  
-  state = { 
-    fontLoaded: false 
-  };
-
-  async componentDidMount() {
-    await Expo.Font.loadAsync({
-      'Roboto': require('native-base/Fonts/Roboto.ttf'),
-      'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-      'Ionicons': require('@expo/vector-icons/fonts/Ionicons.ttf'),
-    });
-    this.setState({fontLoaded: true});
-  }
-
-
-	render() {
-    if (!this.state.fontLoaded)
-      return null;
+	render() 
+  {
     return (
       <Container>
         <StatusBar barStyle="light-content" />
           <ImageBackground source={launchscreenBg} style={styles.imageContainer}>
-              <AppNavigator />
+            <AppNavigator />
           </ImageBackground>
       </Container>
       );
