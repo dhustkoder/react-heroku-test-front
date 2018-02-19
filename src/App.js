@@ -16,10 +16,10 @@ const launchscreenBg = require("../assets/launchscreen-bg.png");
 
 const AppNavigator = StackNavigator(
   {
+    ListUsers: { screen: ListUsers },
     Login: { screen: Login },
     Register: { screen: Register },
     Home: { screen: Home },
-    ListUsers: { screen: ListUsers },
   },
 
   {

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Alert } from "react-native";
+import { Alert, Keyboard } from "react-native";
 import { Text, Content, Form, Item, Button, Input, Container } from "native-base";
 import { StackNavigator } from "react-navigation";
-
+import Api from "../../sys/api";
 
 export default class Login extends Component<Props> {
   static navigationOptions = {
@@ -25,37 +25,22 @@ export default class Login extends Component<Props> {
       Alert.alert("Login em andamento...");
     } else if (this.state.login != "" && this.state.pass != "") {
       this.setState({tryingToLogin: true});
-      fetch('https://shielded-retreat-49907.herokuapp.com/api/users/login', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      Api.post(
+        'users/login',
+        JSON.stringify({
           login: this.state.login,
-          password:  this.state.pass
-          }),
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log("doLogin: communication done!");
-        var data = responseJson.original;
-        console.log(responseJson);
-        this.setState({
+          password:  this.state.pass,
+        }),
+        (data) => {
+          console.log("doLogin: communication done!");
+          console.log(data);
+          this.setState({
           tryingToLogin: false,
           loginFailed: data['error'] ? true : false,
           loginFailReason: data['error'],
           loginSucceed: data['success'] ? true : false
+          });
         });
-      })
-      .catch((error) => {
-        console.error(error);
-        this.setState({
-          tryingToLogin: false,
-          loginFailed: true,
-          loginFailReason: error
-        });
-      });
     } else {
       Alert.alert("Preencha todos os campos!");
     }
@@ -92,7 +77,7 @@ export default class Login extends Component<Props> {
               </Item>
             </Form>
 
-            <Button block onPress={() => this.setState({loginPressed: true})} style={{ margin: 15, marginTop: 15 }}>
+            <Button block onPress={() => { Keyboard.dismiss(); this.setState({loginPressed: true}); }} style={{ margin: 15, marginTop: 15 }}>
               <Text>Logar</Text>
             </Button>
             

@@ -11,7 +11,7 @@ import {
   Body,
 } from "native-base";
 import { StackNavigator } from "react-navigation";
-
+import Api from "../../sys/api";
 
 export default class ListUsers extends Component<Props> {
   static navigationOptions = {
@@ -22,15 +22,9 @@ export default class ListUsers extends Component<Props> {
     userlist: null
   };
 
-  async componentDidMount() 
+  componentDidMount() 
   {
-    try {
-      const theFetch = await fetch("https://shielded-retreat-49907.herokuapp.com/api/users");
-      const theFetchJson = await theFetch.json();
-      this.setState({userlist: theFetchJson.original});
-    } catch (error) {
-      console.error(error);
-    }
+    Api.get('users', (data) => this.setState({userlist: data}));
   }
 
 
